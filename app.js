@@ -9,9 +9,8 @@ app.use(express.urlencoded({ extended: true }));
 // app.engine('html', require('ejs').renderFile)
 // app.set('view engine', 'html')
 
-app.post("/enquiry", (req, res) => {
+app.post("/enquiry", async (req, res) => {
   try {
-      
     let requestDetails = {
       name: req.body["name"],
       email: req.body["email"],
@@ -21,10 +20,11 @@ app.post("/enquiry", (req, res) => {
     let newRequest = new Request({
       ...requestDetails,
     });
-    newRequest.save();
+    await newRequest.save();
     res.send({
       success: true,
       message: "Enquiry submitted successfully !",
+      code: 201,
     });
   } catch (err) {
     res.send({
