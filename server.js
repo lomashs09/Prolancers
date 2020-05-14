@@ -21,6 +21,5 @@ if(app.get('env')==='production'){
 }
 
 app.listen(PORT,()=>{
-    console.log(app.get('env'))
     console.log("Server running on PORT "+PORT+"!")
 })
