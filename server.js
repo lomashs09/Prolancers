@@ -14,6 +14,12 @@ mongoose.connect('mongodb+srv://dbCloud:$GET(PRO)@cluster0-bzeio.mongodb.net/Enq
 })
 const app = require('./app')
 
-app.listen(3000,()=>{
-    console.log("Server running on PORT "+3000+"!")
+let PORT = 3000;
+
+if(app.get('env')==='production'){
+    PORT = process.env.PORT
+}
+
+app.listen(PORT,()=>{
+    console.log("Server running on PORT "+PORT+"!")
 })
