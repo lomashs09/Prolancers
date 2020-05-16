@@ -24,6 +24,7 @@ app.post("/enquiry", async (req, res) => {
     res.send({
       success: true,
       message: "Enquiry submitted successfully !",
+      code: 201,
     });
   } catch (err) {
     res.send({
