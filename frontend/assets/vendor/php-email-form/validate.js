@@ -129,7 +129,7 @@ jQuery(document).ready(function($) {
       message:$('#message').val()
     }
    
-    let r = await fetch("http://localhost:3000/enquiry",{
+    let r = await fetch("https://pro-lancers.herokuapp.com/enquiry",{
       method:"POST",
       headers:{
         "Content-Type": "application/x-www-form-urlencoded"
