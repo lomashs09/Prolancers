@@ -2,9 +2,10 @@ jQuery(document).ready(function($) {
   "use strict";
 
   //Contact
-  $('form.php-email-form').submit(function() {
+  $('.form-submit').click(
+    async function() {
    
-    var f = $(this).find('.form-group'),
+    var f = $(".php-email-form").find('.form-group'),
       ferror = false,
       emailExp = /^[^\s()<>@,;:\/]+@\w[\w\.-]+\.[a-z]{2,}$/i;
 
@@ -90,37 +91,72 @@ jQuery(document).ready(function($) {
       }
     });
     if (ferror) return false;
-    else var str = $(this).serialize();
+    // else var str = new URLSearchParams({})
+    // $(".php-email-form").serialize();
 
-    var this_form = $(this);
-    var action = $(this).attr('action');
+    var this_form = $(".php-email-form");
+    // var action = $(this).attr('action');
 
-    if( ! action ) {
-      this_form.find('.loading').slideUp();
-      this_form.find('.error-message').slideDown().html('The form action property is not set!');
-      return false;
-    }
+    // if( ! action ) {
+    //   this_form.find('.loading').slideUp();
+    //   this_form.find('.error-message').slideDown().html('The form action property is not set!');
+    //   return false;
+    // }
     
     this_form.find('.sent-message').slideUp();
     this_form.find('.error-message').slideUp();
     this_form.find('.loading').slideDown();
     
-    $.ajax({
-      type: "POST",
-      url: action,
-      data: str,
-      success: function(msg) {
-        if (msg == 'OK') {
-          this_form.find('.loading').slideUp();
+    // $.ajax({
+    //   type: "POST",
+    //   url: action,
+    //   data: str,
+    //   success: function(msg) {
+    //     if (msg == 'OK') {
+    //       this_form.find('.loading').slideUp();
+    //       this_form.find('.sent-message').slideDown();
+    //       this_form.find("input:not(input[type=submit]), textarea").val('');
+    //     } else {
+    //       this_form.find('.loading').slideUp();
+    //       this_form.find('.error-message').slideDown().html(msg);
+    //     }
+    //   }
+    // });
+    let dataObj={
+      name:$('#name').val(),
+      email:$('#email').val(),
+      subject:$('#subject').val(),
+      message:$('#message').val()
+    }
+   
+    let r = await fetch("http://localhost:3000/enquiry",{
+      method:"POST",
+      headers:{
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body:new URLSearchParams({...dataObj}).toString()
+    })
+    r=await r.json()
+    if(r.success){
+        this_form.find('.loading').slideUp();
           this_form.find('.sent-message').slideDown();
           this_form.find("input:not(input[type=submit]), textarea").val('');
-        } else {
+    } else {
           this_form.find('.loading').slideUp();
-          this_form.find('.error-message').slideDown().html(msg);
+          this_form.find('.error-message').slideDown().html(r.message);
         }
-      }
-    });
+
+    // if (msg == 'OK') {
+        //   this_form.find('.loading').slideUp();
+        //   this_form.find('.sent-message').slideDown();
+        //   this_form.find("input:not(input[type=submit]), textarea").val('');
+        // } else {
+        //   this_form.find('.loading').slideUp();
+        //   this_form.find('.error-message').slideDown().html(msg);
+        // }
+    
     return false;
   });
-
+  return false;
 });
+
